@@ -14,11 +14,12 @@ export interface GameState {
   format: 'kairoa-save'; version: 1;
   tick: number; paused: boolean; seed: number;
   map: { w: number; h: number; solid: number[] /* w*h, 1 = blocked */ };
-  player: { pos: Vec; facing: Vec; stamina: number; maxStamina: number; sprinting: boolean; attackCd: number; switchCd: number };
+  player: { pos: Vec; facing: Vec; stamina: number; maxStamina: number; sprinting: boolean; attackCd: number; switchCd: number; move: Vec };
   party: Character[]; active: number;
   enemies: Enemy[]; chests: Chest[];
   inventory: Record<string, number>;
   gems: number; pity: number; owned: string[];
+  equipment: Record<string, string>; lastPull: string[]; rng: number;
   extra: Record<string, unknown>;
 }
 export interface Engine {
@@ -27,4 +28,6 @@ export interface Engine {
   step(dt: number): void;            // advance simulation (no-op while paused)
   serialize(): string;
   subscribe(fn: () => void): () => void;
+  equip(charId: string, itemId: string | null): boolean; // undoable equipment edit
+  lastSave: string;                  // text produced by the last file.save
 }

@@ -1,0 +1,14 @@
+Integrator notes (UI owner: src/ui, index.html)
+1. In index.html <head> add:
+     <link rel="manifest" href="./manifest.webmanifest">
+     <link rel="icon" href="./icon.svg" type="image/svg+xml">
+     <meta name="theme-color" content="#0e1a2b">
+     <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+   and before </body>:  <script src="./pwa-register.js"></script>
+   (public/ files are copied verbatim into dist/ by vite; the single-file release/kairoa.html
+   inlines JS/CSS only, so there SW/manifest are inactive - install the PWA from dist/ hosting.)
+2. Regenerate PNG icons: node scripts/make-icons.mjs
+3. Release: npm run package  -> release/kairoa.html (prints abs path + size)
+4. e2e contract: controls carry data-cmd (+data-index for party.switch, data-count for
+   gacha.pull); window.__kairoa = Engine; ?seed=N picks seed; name input = input[data-name-input];
+   defeat overlay shows [data-cmd="game.respawn"]; Esc / Ctrl+Z / Ctrl+Shift+Z keyboard shortcuts.
