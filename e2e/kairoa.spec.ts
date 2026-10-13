@@ -42,7 +42,8 @@ test('F02 sprint drains stamina, stops at 0, regenerates', async ({ page }) => {
   const s0 = await st(page, (s) => s.player.stamina);
   await step(page, 0.1, 10);
   expect(await st(page, (s) => s.player.stamina)).toBeLessThan(s0);
-  await step(page, 0.1, 400);
+  // keep sprinting until the engine itself ends it (stamina exhausted); regen must not mask the 0
+  for (let i = 0; i < 100 && (await st(page, (s) => s.player.sprinting)); i++) await step(page, 0.1, 5);
   const s1 = await st(page, (s) => ({ st: s.player.stamina, sp: s.player.sprinting }));
   expect(s1.st).toBeLessThanOrEqual(0.0001);
   expect(s1.sp).toBe(false);
@@ -119,7 +120,7 @@ test('F07 reactions: ember on tide-aura enemy multiplies damage (mist x1.5)', as
 test('F08 enemy within aggro range approaches and damages player', async ({ page }) => {
   await page.evaluate(() => {
     const s = (window as any).__kairoa.state; s.enemies.length = 0;
-    s.enemies.push({ id: 9002, kind: 'test', pos: { x: s.player.pos.x + 3, y: s.player.pos.y }, hp: 100, maxHp: 100, aura: null, frozenFor: 0, atkCd: 0 });
+    s.enemies.push({ id: 9002, kind: 'mossling', pos: { x: s.player.pos.x + 3, y: s.player.pos.y }, hp: 100, maxHp: 100, aura: null, frozenFor: 0, atkCd: 0 });
   });
   const d0 = await st(page, (s) => Math.hypot(s.enemies[0].pos.x - s.player.pos.x, s.enemies[0].pos.y - s.player.pos.y));
   const hp0 = await st(page, (s) => s.party.reduce((a: number, c: any) => a + c.hp, 0));

@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#0a1118">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icon.svg" type="image/svg+xml">
 <title>카이로아</title>
 <style>
 :root{--bg:#0a1118;--panel:rgba(16,26,36,.92);--line:rgba(255,255,255,.22);--fg:#eef4f8;--accent:#e9b64f;
@@ -24,7 +26,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--
 #cd{position:absolute;left:0;bottom:0;width:100%;height:0;background:rgba(0,0,0,.55);border-radius:0 0 50% 50%;pointer-events:none}
 #ring{position:absolute;inset:-6px;width:calc(100% + 12px);height:calc(100% + 12px);transform:rotate(-90deg);pointer-events:none}
 #ring circle{fill:none;stroke-width:3.5}
-#joy{border-radius:50%;background:rgba(255,255,255,.07);border:2px solid var(--line)}
+#joystick{border-radius:50%;background:rgba(255,255,255,.07);border:2px solid var(--line)}
 #knob{position:absolute;left:50%;top:50%;width:52px;height:52px;margin:-26px 0 0 -26px;border-radius:50%;
  background:radial-gradient(circle at 35% 30%,#fff,#9ab);opacity:.8;pointer-events:none}
 .pt{border:2px solid var(--line);border-radius:12px;background:var(--panel);color:var(--fg);padding:3px;font:600 11px var(--font);
@@ -62,7 +64,7 @@ h3{margin:4px 0 8px;font-size:16px}
   <button id="minimap" data-ui="map" aria-label="지도"><canvas width="84" height="84"></canvas></button>
   <button id="pause" class="btn" data-cmd="menu.toggle" aria-label="일시정지"><svg viewBox="0 0 24 24"><path d="M8 5v14M16 5v14"/></svg></button>
   <div id="toast"></div>
-  <div id="joy"><div id="knob"></div></div>
+  <div id="joystick" data-cmd="player.move" role="slider" aria-label="이동 조이스틱"><div id="knob"></div></div>
   <button id="attack" class="btn game" data-cmd="combat.attack" aria-label="공격"><svg viewBox="0 0 24 24"><path d="M5 19L17 7M14 4h6v6M5 19l-1 1M8 16l-2-2"/></svg><span>공격</span></button>
   <button id="skill" class="btn game" data-cmd="combat.skill" aria-label="원소 기술"><div id="cd"></div><svg viewBox="0 0 24 24"><path d="M12 3c4 4 6 7 3 11-2 3-6 3-7 0 2 1 4 0 4-3-3 1-5-1-3-4 1-2 2-3 3-4z"/></svg><span>기술</span></button>
   <button id="burst" class="btn game" data-cmd="combat.burst" aria-label="필살기"><svg viewBox="0 0 24 24"><path d="M12 2l2.5 7.5L22 12l-7.5 2.5L12 22l-2.5-7.5L2 12l7.5-2.5z"/></svg><span>필살</span></button>
@@ -75,6 +77,7 @@ h3{margin:4px 0 8px;font-size:16px}
 </div>
 <div id="over"><button class="mb" data-cmd="game.respawn">전원 쓰러짐 - 부활하기</button></div>
 <div id="menu"><div id="panel"></div></div>
+<script src="./pwa-register.js"></script>
 <script type="module" src="/src/main.ts"></script>
 </body>
 </html>
