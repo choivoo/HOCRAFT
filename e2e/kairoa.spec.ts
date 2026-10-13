@@ -42,9 +42,12 @@ test('F02 sprint drains stamina, stops at 0, regenerates', async ({ page }) => {
   const s0 = await st(page, (s) => s.player.stamina);
   await step(page, 0.1, 10);
   expect(await st(page, (s) => s.player.stamina)).toBeLessThan(s0);
-  // keep sprinting until the engine itself ends it (stamina exhausted); regen must not mask the 0
-  for (let i = 0; i < 100 && (await st(page, (s) => s.player.sprinting)); i++) await step(page, 0.1, 5);
-  const s1 = await st(page, (s) => ({ st: s.player.stamina, sp: s.player.sprinting }));
+  // step synchronously inside one evaluate (the live rAF loop would otherwise regen between calls)
+  const s1 = await page.evaluate(() => {
+    const e = (window as any).__kairoa;
+    for (let i = 0; i < 5000 && e.state.player.sprinting; i++) e.step(0.05);
+    return { st: e.state.player.stamina, sp: e.state.player.sprinting };
+  });
   expect(s1.st).toBeLessThanOrEqual(0.0001);
   expect(s1.sp).toBe(false);
   await dispatch(page, 'player.sprint', { on: false });
@@ -177,8 +180,8 @@ test('F12 save -> reload -> load round trip, unknown fields kept', async ({ page
   await page.evaluate(() => {
     const s = (window as any).__kairoa.state; s.gems = 4321; s.extra.mystery = { keep: [1, 2, 3] };
   });
+  await openMenu(page); // pausing freezes the state so the snapshot below is exactly what gets saved
   const before = await page.evaluate(() => (window as any).__kairoa.serialize());
-  await openMenu(page);
   await tap(page, 'file.save');
   await page.reload();
   await page.waitForFunction(() => !!(window as any).__kairoa);

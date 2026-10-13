@@ -16,6 +16,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--
 #game{position:fixed;inset:0;display:block;touch-action:none}
 #hud{position:fixed;inset:0;pointer-events:none;touch-action:none;
  padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+#hud.hidden{visibility:hidden}
 #hud>*{position:absolute;pointer-events:auto;touch-action:none}
 .btn{border:2px solid var(--line);border-radius:50%;background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.28),rgba(20,32,44,.78));
  color:var(--fg);font:600 12px var(--font);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0;cursor:pointer}

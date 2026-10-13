@@ -10,7 +10,9 @@ const store = {
   set(k: string, v: string) { try { localStorage.setItem(k, v); } catch { /* ignore */ } },
 };
 const seedParam = Number(new URLSearchParams(location.search).get('seed'));
-const engine = createEngine(Number.isFinite(seedParam) && seedParam > 0 ? seedParam : 1, store.get(AUTO_KEY) ?? undefined);
+const hasSeed = Number.isFinite(seedParam) && seedParam > 0;
+// an explicit ?seed=N means a fresh deterministic game; otherwise resume the autosave
+const engine = createEngine(hasSeed ? seedParam : 1, hasSeed ? undefined : store.get(AUTO_KEY) ?? undefined);
 (window as unknown as { __kairoa: typeof engine }).__kairoa = engine;
 
 const send = (id: CommandId, payload: unknown) => (engine.dispatch as (i: CommandId, p: unknown) => void)(id, payload);

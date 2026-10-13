@@ -76,6 +76,7 @@ export class Hud {
     $('interact').style.visibility = near ? 'visible' : 'hidden';
     $('over').classList.toggle('show', s.party.length > 0 && s.party.every(c => c.hp <= 0));
     $('menu').classList.toggle('show', s.paused);
+    $('hud').classList.toggle('hidden', s.paused);
     if (s.paused) { this.lastMenuT -= dt; if (this.lastMenuT <= 0) { this.lastMenuT = 0.1; this.renderMenu(false); } }
   }
 
